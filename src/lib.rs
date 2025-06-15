@@ -1,9 +1,10 @@
 use binaryninja::{
-    binaryninjacore_sys::{BNMessageBoxButtonSet, BNMessageBoxIcon},
-    binaryview::{BinaryView, BinaryViewBase},
-    command::{register_for_range, RangeCommand},
+    binary_view::{BinaryView, BinaryViewBase},
+    command::{RangeCommand, register_command_for_range},
     interaction::{get_save_filename_input, show_message_box},
 };
+
+use binaryninjacore_sys::{BNMessageBoxButtonSet, BNMessageBoxIcon};
 
 use std::ops::Range;
 use std::{fs::File, io};
@@ -11,9 +12,9 @@ use std::{fs::File, io};
 const BUF_SIZE: usize = 1024;
 
 #[allow(non_snake_case)]
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn UIPluginInit() -> bool {
-    register_for_range("Dump to file", "Dumps selection to a file", Dumper::new());
+    register_command_for_range("Dump to file", "Dumps selection to a file", Dumper::new());
 
     true
 }
